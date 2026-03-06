@@ -38,3 +38,5 @@ async function rateLimitUser(req:Request, res:Response, next:NextFunction){
         })
     }
 }
+
+export default rateLimitUser

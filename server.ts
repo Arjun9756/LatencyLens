@@ -25,6 +25,14 @@ app.get('/' , (req,res,next)=>{
     })
 })
 
+// Browser OPTIONS Request Handle
+app.options("/*" , (req,res,next)=>{
+    res.setHeader('Access-Control-Allowed-Origin' , "*")
+    res.setHeader('Access-Control-Allowed-Methods' , "GET,PUT,PATCH,DELETE,POST,OPTIONS")
+    res.setHeader("Access-Control-Allowed-Headers" , "Authorization,Content-Type")
+    res.statusCode = 200
+})
+
 app.listen(process.env.SERVER_PORT || 8080 , (err)=>{
     if(err){
         fs.writeFile(path.join(__dirname , ".." , "LogMetrics.txt") , `\n ${new Date().toLocaleDateString('IN')} Server Starting Problem ${err?.message || err}` , (err)=>{})   
