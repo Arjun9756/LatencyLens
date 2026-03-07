@@ -3,6 +3,8 @@ import path from "path"
 import dotenv from 'dotenv'
 import os from 'os'
 import fs from 'fs'
+import rateLimit from './ServerSecurity/Rate_Limit.Security'
+import LatencyRoute from './Routes/Latency.Route'
 
 dotenv.config({
     path:path.join(__dirname , ".." , ".env")
@@ -15,7 +17,7 @@ app.use(express.urlencoded({
 }))
 app.set("trust proxy" , true)
 
-app.get('/' , (req,res,next)=>{
+app.get('/' , rateLimit , (req,res,next)=>{
     return res.status(200).json({
         status:true,
         message:`Server is Running on Port ${process.env.SERVER_PORT}`,
@@ -32,6 +34,8 @@ app.options("/*" , (req,res,next)=>{
     res.setHeader("Access-Control-Allowed-Headers" , "Authorization,Content-Type")
     res.statusCode = 200
 })
+
+app.use("/api/monitor" , LatencyRoute)
 
 app.listen(process.env.SERVER_PORT || 8080 , (err)=>{
     if(err){
