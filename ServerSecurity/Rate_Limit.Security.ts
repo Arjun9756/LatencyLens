@@ -9,7 +9,7 @@ dotenv.config({
 
 async function rateLimitUser(req:Request, res:Response, next:NextFunction){
     const userIP = req.header('X-forwarded-for')?.split(' ')[0] || req.header('cf-connecting-ip') || req.ip as string
-    const rateLimitThresholdValue = process.env.RATE_LIMIT
+    const rateLimitThresholdValue = process.env.rateLimitThresholdValue
     const key = `rateLimit:${userIP}`
 
     try{
