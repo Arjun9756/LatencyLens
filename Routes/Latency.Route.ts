@@ -1,6 +1,9 @@
 import express from 'express'
 import path from 'path'
+import generateUUID from '../Utils/UUID'
 import rateLimit from '../ServerSecurity/Rate_Limit.Security'
+import publishURL from '../RedisWorkers/Redis.Producer'
+
 const router = express.Router()
 
 function validateWebiste(wesbiteURL:string):boolean{
@@ -32,7 +35,14 @@ router.post('/getMonitor' , rateLimit , (req,res)=>{
         })
     }
         
-    return res.statusCode = 200
+    const uuid = generateUUID()
+    publishURL(wesbiteURL , uuid , req.ip)
+
+    return res.status(200).json({
+        status:true,
+        message:"Fetching The Data From Servers Wait For a While!!",
+        UUID:uuid
+    })
 })
 
 export default router
